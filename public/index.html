@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>R.js example</title>
+</head>
+<body>
+  <main>
+    <section>
+      <!-- <form method="post" action="/api/hello/">
+        <label for="first_name">First Name</label>
+        <input type="text" id="first_name" name="first_name">
+        <label for="last_name">Last Name</label>
+        <input type="text" id="first_name" name="last_name">
+      </form> -->
+      <button id="hello-world">Get Hello</button>
+    </section>
+  </main>
+  
+  <script>
+    const button = document.getElementById('hello-world')
+    button.addEventListener("click", () => {
+      fetch('/api/hello')
+      .then(res => res.json()).then(data => console.log(data))
+    });
+  </script>
+</body>
+</html>
