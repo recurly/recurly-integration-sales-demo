@@ -17,7 +17,6 @@ app.get('/api/hello', (request, response) => {
   response.send({hello: 'world'})
 })
 
-
 const pubDirPath = '../../public'
 
 app.use(express.static(pubDirPath));
