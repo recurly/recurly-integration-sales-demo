@@ -22,4 +22,4 @@ const pubDirPath = '../../public'
 
 app.use(express.static(pubDirPath));
 
-app.listen(9001, () => console.log('Listening on port localhost:9001'))
+app.listen(9001, () => console.log('Listening on port http://localhost:9001'))
