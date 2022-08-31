@@ -4,7 +4,7 @@ require 'json'
 require 'recurly'
 require 'pry'
 require 'dotenv'
-Dotenv.load
+Dotenv.load('../../.env')
 
 # Used to parse URIs
 require 'uri'
@@ -13,11 +13,11 @@ require 'securerandom'
 
 set :bind, '0.0.0.0'
 set :port, ENV['PORT'] || 9001
-set :public_folder, ENV['PUBLIC_DIR_PATH'] || '../../public'
+set :public_folder, '../../public'
 
 enable :logging
 
-success_url = ENV['SUCCESS_URL']
+success_url = File.join(settings.public_folder, 'success.html')
 
 client = Recurly::Client.new(api_key: ENV['RECURLY_API_KEY'])
 
@@ -81,19 +81,26 @@ post '/api/purchases/new' do
       code: recurly_account_code,
       first_name: params['first-name'],
       last_name: params['last-name'],
+      address: {
+        country: params['country'],
+        region: params['region']
+      },
       billing_info: billing_info
-    }
+    },
+    subscriptions: [
+      { plan_code: params['plan-code'] }
+    ]
   }
 
-  subscriptions = params['subscriptions']&.map do |sub_params|
-    if !sub_params['plan-code'].empty?
-      { plan_code: sub_params['plan-code'] }
-    else
-      nil
-    end
-  end.compact
-  # Add subscriptions to the request if there are any
-  purchase_create[:subscriptions] = subscriptions if subscriptions&.any?
+  # subscriptions = params['subscriptions']&.map do |sub_params|
+  #   if !sub_params['plan-code'].empty?
+  #     { plan_code: sub_params['plan-code'] }
+  #   else
+  #     nil
+  #   end
+  # end&.compact
+  # # Add subscriptions to the request if there are any
+  # purchase_create[:subscriptions] = subscriptions if subscriptions&.any?
   
   # Line Items - TBAdded
   # line_items = params['items']&.map do |item_params|
@@ -106,9 +113,8 @@ post '/api/purchases/new' do
   # purchase_create[:line_items] = line_items if line_items&.any?
 
   begin
-    purchase = client.create_purchase(body: purchase_create)
-
-    redirect success_url
+    # purchase = client.create_purchase(body: purchase_create)
+    send_file success_url
   rescue Recurly::Errors::TransactionError => e
     txn_error = e.recurly_error.transaction_error
     hash_params = {
@@ -121,5 +127,29 @@ post '/api/purchases/new' do
     # Here we may wish to log the API error and send the customer to an appropriate URL, perhaps including an error message
     handle_error e
   end
+end
+
+get '/success' do
+  content_type :json
+  { action: 'success' }.to_json
+end
+
+get '/config' do
+  plans = [].tap do |plans|
+    client.list_plans(params: {limit: 200, state: 'active'}).each do |plan|
+      plans << { code: plan.code, name: plan.name }
+    end
+  end
+
+  config = {
+    publicKey: ENV['RECURLY_PUBLIC_KEY'],
+    plans: plans
+  }
+  content_type :js
+  "window.recurlyConfig = #{config.to_json}"
+end
+
+get '/' do
+  send_file File.join(settings.public_folder, 'index.html')
 end
 
