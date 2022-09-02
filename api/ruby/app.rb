@@ -4,6 +4,7 @@ require 'json'
 require 'recurly'
 require 'pry'
 require 'dotenv'
+require 'json'
 Dotenv.load('../../.env')
 
 # Used to parse URIs
@@ -62,7 +63,7 @@ end
 post '/api/purchases/new' do
   # This is not a good idea in production but helpful for debugging
   # These params may contain sensitive information you don't want logged
-  logger.info params
+  logger.info request.body.read
 
   recurly_account_code = params['recurly-account-code'] || SecureRandom.uuid
 
@@ -114,6 +115,8 @@ post '/api/purchases/new' do
 
   begin
     # purchase = client.create_purchase(body: purchase_create)
+    status 200
+    return {result:'success'}.to_json
     send_file success_url
   rescue Recurly::Errors::TransactionError => e
     txn_error = e.recurly_error.transaction_error

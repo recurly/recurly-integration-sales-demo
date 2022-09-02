@@ -39,13 +39,28 @@ recurlyForm.addEventListener('submit', function (event) {
 	event.preventDefault();
 	const form = this;
 
-	recurly.token(elements, form, function (err, token) {
+	recurly.token(elements, form, async function (err, token) {
 		document.getElementById('errors').innerHTML = '';
+    const formData = [...new FormData(form)]
+      .reduce((entries, [key, value]) => {
+        entries[key] = value;
+        return entries;
+      }, {});
+
 		if (err) error(err);
 		else {
 			console.log('SUCCESS:', token);
-
-			form.submit();
+      const response = await fetch('/api/purchases/new', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData) // body data type must match "Content-Type" header
+      });
+      console.log(await response.json())
+    
+			// form.submit();
 		}
 	});
 });
