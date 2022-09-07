@@ -18,8 +18,6 @@ set :public_folder, '../../public'
 
 enable :logging
 
-success_url = File.join(settings.public_folder, 'success.html')
-
 client = Recurly::Client.new(api_key: ENV['RECURLY_API_KEY'])
 
 # Generic error handling
@@ -27,10 +25,22 @@ client = Recurly::Client.new(api_key: ENV['RECURLY_API_KEY'])
 # customer to the error URL, including an error message
 def handle_error e
   logger.error e
-  error_uri = URI.parse ENV['ERROR_URL']
+  error_uri = URI.parse ENV['ERROR_URL'] || 'index.html'
   error_query = URI.decode_www_form(String(error_uri.query)) << ['error', e.message]
   error_uri.query = URI.encode_www_form(error_query)
   redirect error_uri.to_s
+end
+
+def handle_success(params)
+  uri = URI.parse 'success.html'
+  query = params.map { |k,v| [k.to_s, v] }
+  uri.query = URI.encode_www_form(query)
+  puts uri.to_s
+  redirect uri.to_s 
+end
+
+def url_params(hash)
+  hash.map { |k, v| "#{k}=#{v}" }.join('&')
 end
 
 # GET plans on subdomain
@@ -63,6 +73,7 @@ end
 post '/api/purchases/new' do
   # This is not a good idea in production but helpful for debugging
   # These params may contain sensitive information you don't want logged
+  logger.info params
   logger.info request.body.read
 
   recurly_account_code = params['recurly-account-code'] || SecureRandom.uuid
@@ -79,7 +90,7 @@ post '/api/purchases/new' do
     currency: "USD",
     # This can be an existing account or a new acocunt
     account: {
-      code: recurly_account_code,
+      # code: recurly_account_code,
       first_name: params['first-name'],
       last_name: params['last-name'],
       address: {
@@ -114,27 +125,24 @@ post '/api/purchases/new' do
   # purchase_create[:line_items] = line_items if line_items&.any?
 
   begin
-    # purchase = client.create_purchase(body: purchase_create)
-    status 200
-    return {result:'success'}.to_json
-    send_file success_url
+    purchase = client.create_purchase(body: purchase_create)
+    handle_success({
+      account_code: '12345',
+      first_name: params['first-name'],
+      last_name: params['last-name']
+    })
   rescue Recurly::Errors::TransactionError => e
     txn_error = e.recurly_error.transaction_error
-    hash_params = {
+    hash_params = url_params({
       token_id: recurly_token_id,
       action_token_id: txn_error.three_d_secure_action_token_id,
       account_code: recurly_account_code
-    }.map { |k, v| "#{k}=#{v}" }.join('&')
+    })
     redirect "/3d-secure/authenticate.html##{hash_params}"
   rescue Recurly::Errors::APIError => e
     # Here we may wish to log the API error and send the customer to an appropriate URL, perhaps including an error message
     handle_error e
   end
-end
-
-get '/success' do
-  content_type :json
-  { action: 'success' }.to_json
 end
 
 get '/config' do
@@ -155,4 +163,3 @@ end
 get '/' do
   send_file File.join(settings.public_folder, 'index.html')
 end
-

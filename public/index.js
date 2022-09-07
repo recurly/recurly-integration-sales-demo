@@ -50,17 +50,17 @@ recurlyForm.addEventListener('submit', function (event) {
 		if (err) error(err);
 		else {
 			console.log('SUCCESS:', token);
-      const response = await fetch('/api/purchases/new', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData) // body data type must match "Content-Type" header
-      });
-      console.log(await response.json())
+      // const response = await fetch('/api/purchases/new', {
+      //   method: 'POST',
+      //   mode: 'no-cors',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify(formData) // body data type must match "Content-Type" header
+      // });
+      // console.log(await response.json())
     
-			// form.submit();
+			form.submit();
 		}
 	});
 });
