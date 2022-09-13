@@ -13,18 +13,18 @@
     <section>
       <form id="form" method="post" action="/api/purchases/new">
         <div>
-          <label for="plan">Plan</label>
-          <select name="plan-code" class="js-plan-select" id="plan"></select>
+          <label for="plan">Select a plan</label>
+          <select data-recurly="plan" name="plan-code" class="js-plan-select" id="plan"></select>
         </div>
         <div>
           <label for="first_name">First Name</label>
-          <input type="text" name="first-name" data-recurly="first_name">
+          <input type="text" id="first_name" name="first-name" data-recurly="first_name">
           <label for="last_name">Last Name</label>
-          <input type="text" name="last-name" data-recurly="last_name">
+          <input type="text" id="last_name" name="last-name" data-recurly="last_name">
           <label for="state">State</label>
-          <input type="text" name="region" data-recurly="region">
+          <input type="text" id="region" name="region" data-recurly="region">
           <label for="country">Country</label>
-          <input type="text" name="country" data-recurly="country">
+          <input type="text" id="country" name="country" data-recurly="country">
           <input type="hidden" data-recurly="token" name="recurly-token">
         </div>
         <div id="recurly-elements">
@@ -37,12 +37,38 @@
           <label for="reculry-elements-cvv">CVV</label>
           <div id="recurly-elements-cvv"></div> -->
         </div>
-        
         <div id="errors"></div>
+        <p>
+          Due now
+        </p>
+        <ul>
+          <li>
+            Discount:
+            <span data-recurly="currency_symbol"></span>
+            <span data-recurly="discount_now"></span>
+          </li>
+          <li>
+            Subtotal:
+            <span data-recurly="currency_symbol"></span>
+            <span data-recurly="subtotal_now"></span>
+          </li>
+          <li>
+            Tax:
+            <span data-recurly="currency_symbol"></span>
+            <span data-recurly="taxes_now"></span>
+          </li>
+          <li>----</li>
+          <li>
+            Total:
+            <span data-recurly="currency_symbol"></span>
+            <span data-recurly="total_now"></span>
+          </li>
+        </ul>
         <button id="subscribe">Subscribe</button>
+        <div id="errors"></div>
       </form>
     </section>
   </main>
-  <script src="index.js"></script>
+  <script type="module" src="index.js"></script>
 </body>
 </html>

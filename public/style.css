@@ -193,3 +193,7 @@ li {
   font-size: x-small;
   margin: 0.25rem 0;
 }
+
+#errors {
+  color: #E43C29;
+}
