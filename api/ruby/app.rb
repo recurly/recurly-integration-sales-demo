@@ -4,7 +4,8 @@ require 'json'
 require 'recurly'
 require 'pry'
 require 'dotenv'
-Dotenv.load
+require 'json'
+Dotenv.load('../../.env')
 
 # Used to parse URIs
 require 'uri'
@@ -13,11 +14,9 @@ require 'securerandom'
 
 set :bind, '0.0.0.0'
 set :port, ENV['PORT'] || 9001
-set :public_folder, ENV['PUBLIC_DIR_PATH'] || '../../public'
+set :public_folder, '../../public'
 
 enable :logging
-
-success_url = ENV['SUCCESS_URL']
 
 client = Recurly::Client.new(api_key: ENV['RECURLY_API_KEY'])
 
@@ -26,10 +25,22 @@ client = Recurly::Client.new(api_key: ENV['RECURLY_API_KEY'])
 # customer to the error URL, including an error message
 def handle_error e
   logger.error e
-  error_uri = URI.parse ENV['ERROR_URL']
+  error_uri = URI.parse ENV['ERROR_URL'] || 'index.html'
   error_query = URI.decode_www_form(String(error_uri.query)) << ['error', e.message]
   error_uri.query = URI.encode_www_form(error_query)
   redirect error_uri.to_s
+end
+
+def handle_success(params)
+  uri = URI.parse 'success.html'
+  query = params.map { |k,v| [k.to_s, v] }
+  uri.query = URI.encode_www_form(query)
+  puts uri.to_s
+  redirect uri.to_s 
+end
+
+def url_params(hash)
+  hash.map { |k, v| "#{k}=#{v}" }.join('&')
 end
 
 # GET plans on subdomain
@@ -63,6 +74,7 @@ post '/api/purchases/new' do
   # This is not a good idea in production but helpful for debugging
   # These params may contain sensitive information you don't want logged
   logger.info params
+  logger.info request.body.read
 
   recurly_account_code = params['recurly-account-code'] || SecureRandom.uuid
 
@@ -81,19 +93,26 @@ post '/api/purchases/new' do
       code: recurly_account_code,
       first_name: params['first-name'],
       last_name: params['last-name'],
+      address: {
+        country: params['country'],
+        region: params['region']
+      },
       billing_info: billing_info
-    }
+    },
+    subscriptions: [
+      { plan_code: params['plan-code'] }
+    ]
   }
 
-  subscriptions = params['subscriptions']&.map do |sub_params|
-    if !sub_params['plan-code'].empty?
-      { plan_code: sub_params['plan-code'] }
-    else
-      nil
-    end
-  end.compact
-  # Add subscriptions to the request if there are any
-  purchase_create[:subscriptions] = subscriptions if subscriptions&.any?
+  # subscriptions = params['subscriptions']&.map do |sub_params|
+  #   if !sub_params['plan-code'].empty?
+  #     { plan_code: sub_params['plan-code'] }
+  #   else
+  #     nil
+  #   end
+  # end&.compact
+  # # Add subscriptions to the request if there are any
+  # purchase_create[:subscriptions] = subscriptions if subscriptions&.any?
   
   # Line Items - TBAdded
   # line_items = params['items']&.map do |item_params|
@@ -107,15 +126,19 @@ post '/api/purchases/new' do
 
   begin
     purchase = client.create_purchase(body: purchase_create)
-
-    redirect success_url
+    # binding.pry
+    handle_success({
+      account_code: purchase.charge_invoice.account.code,
+      first_name: params['first-name'],
+      last_name: params['last-name']
+    })
   rescue Recurly::Errors::TransactionError => e
     txn_error = e.recurly_error.transaction_error
-    hash_params = {
+    hash_params = url_params({
       token_id: recurly_token_id,
       action_token_id: txn_error.three_d_secure_action_token_id,
       account_code: recurly_account_code
-    }.map { |k, v| "#{k}=#{v}" }.join('&')
+    })
     redirect "/3d-secure/authenticate.html##{hash_params}"
   rescue Recurly::Errors::APIError => e
     # Here we may wish to log the API error and send the customer to an appropriate URL, perhaps including an error message
@@ -123,3 +146,21 @@ post '/api/purchases/new' do
   end
 end
 
+get '/config' do
+  plans = [].tap do |plans|
+    client.list_plans(params: {limit: 200, state: 'active'}).each do |plan|
+      plans << { code: plan.code, name: plan.name }
+    end
+  end
+
+  config = {
+    publicKey: ENV['RECURLY_PUBLIC_KEY'],
+    plans: plans
+  }
+  content_type :js
+  "window.recurlyConfig = #{config.to_json}"
+end
+
+get '/' do
+  send_file File.join(settings.public_folder, 'index.html')
+end
