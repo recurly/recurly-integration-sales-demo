@@ -90,7 +90,7 @@ post '/api/purchases/new' do
     currency: "USD",
     # This can be an existing account or a new acocunt
     account: {
-      # code: recurly_account_code,
+      code: recurly_account_code,
       first_name: params['first-name'],
       last_name: params['last-name'],
       address: {
@@ -126,8 +126,9 @@ post '/api/purchases/new' do
 
   begin
     purchase = client.create_purchase(body: purchase_create)
+    # binding.pry
     handle_success({
-      account_code: '12345',
+      account_code: purchase.charge_invoice.account.code,
       first_name: params['first-name'],
       last_name: params['last-name']
     })
