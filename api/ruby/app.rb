@@ -161,6 +161,10 @@ get '/config' do
   "window.recurlyConfig = #{config.to_json}"
 end
 
+get '/checkout' do
+  send_file File.join(settings.public_folder, 'checkout.html') 
+end
+
 get '/' do
   send_file File.join(settings.public_folder, 'index.html')
 end
