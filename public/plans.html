@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>R.js example</title>
+  <script src="/config"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://js.recurly.com/v4/recurly.js"></script>
+  <link href="https://js.recurly.com/v4/recurly.css" rel="stylesheet" />
+</head>
+<body>
+  <main>
+    <section>
+      <form id="form" method="post" action="/checkout">
+          <label for="plan">Select a plan</label>
+          <select data-recurly="plan" name="plan-code" class="js-plan-select" id="plan"></select>
+        </div>
+        </div>
+        <div id="errors"></div>
+        <p>
+          Due now
+        </p>
+        <ul>
+          <li>
+            Discount:
+            <span data-recurly="currency_symbol"></span>
+            <span data-recurly="discount_now"></span>
+          </li>
+          <li>
+            Subtotal:
+            <span data-recurly="currency_symbol"></span>
+            <span data-recurly="subtotal_now"></span>
+          </li>
+          <li>
+            Tax:
+            <span data-recurly="currency_symbol"></span>
+            <span data-recurly="taxes_now"></span>
+          </li>
+          <li>----</li>
+          <li>
+            Total:
+            <span data-recurly="currency_symbol"></span>
+            <span data-recurly="total_now"></span>
+          </li>
+        </ul>
+        <button id="subscribe">Subscribe</button>
+        <div id="errors"></div>
+      </form>
+    </section>
+  </main>
+  <script type="module" src="plans.js"></script>
+</body>
+</html>
