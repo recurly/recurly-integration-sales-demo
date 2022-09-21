@@ -14,7 +14,7 @@
       <form id="form" method="post" action="/api/purchases/new">
         <div id="plan-container">
           <div id="plan"></div>
-          <select id="plan-select" data-recurly="plan"></select>
+          <select id="plan-select" data-recurly="plan" name="plan-code"></select>
         </div>
           <label for="first_name">First Name</label>
           <input type="text" id="first_name" name="first-name" data-recurly="first_name">
@@ -23,7 +23,7 @@
           <label for="state">State</label>
           <input type="text" id="region" name="region" data-recurly="region">
           <label for="postal_code">Postal Code</label>
-          <input type="text" id="postal_code" name="postal_code" data-recurly="postal_code">
+          <input type="text" id="postal_code" name="postal-code" data-recurly="postal_code">
           <label for="country">Country</label>
           <input type="text" id="country" name="country" data-recurly="country">
           <input type="hidden" data-recurly="token" name="recurly-token">
@@ -32,14 +32,14 @@
 
         </div>
         <div id="recurly-elements">
-          <!-- <label for="reculry-elements-number">Card Number</label>
+          <label for="reculry-elements-number">Card Number</label>
           <div id="recurly-elements-number"></div>
           <label for="reculry-elements-month">Month</label>
           <div id="recurly-elements-month"></div>
           <label for="reculry-elements-year">Year</label>
           <div id="recurly-elements-year"></div>
           <label for="reculry-elements-cvv">CVV</label>
-          <div id="recurly-elements-cvv"></div> -->
+          <div id="recurly-elements-cvv"></div>
         </div>
         <div id="errors"></div>
         <p>
@@ -73,6 +73,6 @@
       </form>
     </section>
   </main>
-  <script src="checkout.js"></script>
+  <script type="module" src="checkout.js"></script>
 </body>
 </html>

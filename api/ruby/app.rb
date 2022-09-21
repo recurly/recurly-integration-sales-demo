@@ -25,7 +25,7 @@ client = Recurly::Client.new(api_key: ENV['RECURLY_API_KEY'])
 # customer to the error URL, including an error message
 def handle_error e
   logger.error e
-  error_uri = URI.parse ENV['ERROR_URL'] || 'index.html'
+  error_uri = URI.parse 'checkout.html'
   error_query = URI.decode_www_form(String(error_uri.query)) << ['error', e.message]
   error_uri.query = URI.encode_www_form(error_query)
   redirect error_uri.to_s
@@ -126,7 +126,6 @@ post '/api/purchases/new' do
 
   begin
     purchase = client.create_purchase(body: purchase_create)
-    # binding.pry
     handle_success({
       account_code: purchase.charge_invoice.account.code,
       first_name: params['first-name'],
