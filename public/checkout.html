@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>R.js example</title>
+  <script src="/config"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://js.recurly.com/v4/recurly.js"></script>
+  <link href="https://js.recurly.com/v4/recurly.css" rel="stylesheet" />
+</head>
+<body>
+  <main>
+    <section>
+      <form id="form" method="post" action="/api/purchases/new">
+        <div id="plan-container">
+          <div id="plan"></div>
+          <select id="plan-select" data-recurly="plan" name="plan-code"></select>
+        </div>
+          <label for="first_name">First Name</label>
+          <input type="text" id="first_name" name="first-name" data-recurly="first_name">
+          <label for="last_name">Last Name</label>
+          <input type="text" id="last_name" name="last-name" data-recurly="last_name">
+          <label for="state">State</label>
+          <input type="text" id="region" name="region" data-recurly="region">
+          <label for="postal_code">Postal Code</label>
+          <input type="text" id="postal_code" name="postal-code" data-recurly="postal_code">
+          <label for="country">Country</label>
+          <input type="text" id="country" name="country" data-recurly="country">
+          <input type="hidden" data-recurly="token" name="recurly-token">
+          <label for="coupon">coupon</label>
+          <input type="text" id="coupon" name="coupon" data-recurly="coupon">
+
+        </div>
+        <div id="recurly-elements">
+          <label for="reculry-elements-number">Card Number</label>
+          <div id="recurly-elements-number"></div>
+          <label for="reculry-elements-month">Month</label>
+          <div id="recurly-elements-month"></div>
+          <label for="reculry-elements-year">Year</label>
+          <div id="recurly-elements-year"></div>
+          <label for="reculry-elements-cvv">CVV</label>
+          <div id="recurly-elements-cvv"></div>
+        </div>
+        <div id="errors"></div>
+        <p>
+          Due now
+        </p>
+        <ul>
+          <li>
+            Discount:
+            <span data-recurly="currency_symbol"></span>
+            <span data-recurly="discount_now"></span>
+          </li>
+          <li>
+            Subtotal:
+            <span data-recurly="currency_symbol"></span>
+            <span data-recurly="subtotal_now"></span>
+          </li>
+          <li>
+            Tax:
+            <span data-recurly="currency_symbol"></span>
+            <span data-recurly="taxes_now"></span>
+          </li>
+          <li>----</li>
+          <li>
+            Total:
+            <span data-recurly="currency_symbol"></span>
+            <span data-recurly="total_now"></span>
+          </li>
+        </ul>
+        <button id="subscribe">Subscribe</button>
+        <div id="errors"></div>
+      </form>
+    </section>
+  </main>
+  <script type="module" src="checkout.js"></script>
+</body>
+</html>
