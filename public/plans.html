@@ -10,40 +10,13 @@
 </head>
 <body>
   <main>
-    <section>
-      <form id="form" method="post" action="/checkout">
-          <label for="plan">Select a plan</label>
-          <select data-recurly="plan" name="plan-code" class="js-plan-select" id="plan"></select>
-        </div>
-        </div>
+    <fieldset>
+      <legend>Chose your prefered Plan:</legend>
+      <form  class="js-plan-select" id="form" method="get" action="/checkout">
+    </fieldset>
+    <br></br> 
         <div id="errors"></div>
-        <p>
-          Due now
-        </p>
-        <ul>
-          <li>
-            Discount:
-            <span data-recurly="currency_symbol"></span>
-            <span data-recurly="discount_now"></span>
-          </li>
-          <li>
-            Subtotal:
-            <span data-recurly="currency_symbol"></span>
-            <span data-recurly="subtotal_now"></span>
-          </li>
-          <li>
-            Tax:
-            <span data-recurly="currency_symbol"></span>
-            <span data-recurly="taxes_now"></span>
-          </li>
-          <li>----</li>
-          <li>
-            Total:
-            <span data-recurly="currency_symbol"></span>
-            <span data-recurly="total_now"></span>
-          </li>
-        </ul>
-        <button id="subscribe">Subscribe</button>
+        <button id="signup">Sign Up</button>
         <div id="errors"></div>
       </form>
     </section>
