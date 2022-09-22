@@ -148,7 +148,7 @@ end
 get '/config' do
   plans = [].tap do |plans|
     client.list_plans(params: {limit: 200, state: 'active'}).each do |plan|
-      plans << { code: plan.code, name: plan.name }
+      plans << { name: plan.name, unit_amount: plan.currencies[0].unit_amount, code: plan.code, currency: plan.currencies[0].currency}
     end
   end
 
@@ -165,5 +165,5 @@ get '/checkout' do
 end
 
 get '/' do
-  send_file File.join(settings.public_folder, 'index.html')
+  send_file File.join(settings.public_folder, 'plans.html')
 end
