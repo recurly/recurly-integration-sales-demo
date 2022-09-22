@@ -3,8 +3,10 @@ const { plans, publicKey } = window.recurlyConfig;
 
 recurly.configure(publicKey);
 
-window.localStorage.setItem('plan_code', plans[0].code);
+const currentPlan = window.location.search.replace("?plan=","");
+window.localStorage.setItem('plan_code', currentPlan);
 const planCode = window.localStorage.getItem('plan_code');
+
 const planName = plans.reduce((name, allPlans) => {
 	if (allPlans.code === planCode) {
 		name = allPlans.name;
