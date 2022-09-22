@@ -14,9 +14,6 @@ const planName = plans.reduce((name, allPlans) => {
 	return name;
 }, '');
 
-// const { plan_name: planName, plan_code: planCode } = hashParams();
-
-
 const planSelect = document.getElementById('plan-select');
 planSelect.innerHTML = `<option value="${planCode}" name="plan-code">${planName}</option>`;
 planSelect.style.display = 'none';
@@ -41,7 +38,10 @@ const subscribeBtn = document.getElementById('subscribe');
 const recurlyForm = document.querySelector('#form');
 
 // When a customer hits their 'enter' key while using the card element
-cardNumberElement.on('submit', (event) => recurlyForm.submit());
+cardNumberElement.on('submit', (event) => {
+  event.preventDefault();
+  recurlyForm.submit();
+});
 
 recurlyForm.addEventListener('submit', function (event) {
 	event.preventDefault();
@@ -86,6 +86,7 @@ const error = (err) => {
 		const errorEle = document.getElementById(field);
 
 		if (errorEle) {
+      console.log(errorEle)
 			errorEle.defaultValue = messages.join(', ');
 			errorEle.style.borderColor = 'red';
 		} else {
