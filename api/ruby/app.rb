@@ -23,11 +23,13 @@ client = Recurly::Client.new(api_key: ENV['RECURLY_API_KEY'])
 # Generic error handling
 # Here we log the API error and send the
 # customer to the error URL, including an error message
-def handle_error e
-  logger.error e
+def handle_error(params)
+  logger.error params[:error]
   error_uri = URI.parse 'checkout.html'
-  error_query = URI.decode_www_form(String(error_uri.query)) << ['error', e.message]
-  error_uri.query = URI.encode_www_form(error_query)
+  query = URI.decode_www_form(String(error_uri.query)) 
+  query << ['plan_code', params[:plan_code]]
+  query << ['error', params[:error]]
+  error_uri.query = URI.encode_www_form(query)
   redirect error_uri.to_s
 end
 
@@ -97,32 +99,12 @@ post '/api/purchases/new' do
         country: params['country'],
         region: params['region']
       },
-      billing_info: billing_info
+      # billing_info: billing_info
     },
     subscriptions: [
       { plan_code: params['plan-code'] }
     ]
   }
-
-  # subscriptions = params['subscriptions']&.map do |sub_params|
-  #   if !sub_params['plan-code'].empty?
-  #     { plan_code: sub_params['plan-code'] }
-  #   else
-  #     nil
-  #   end
-  # end&.compact
-  # # Add subscriptions to the request if there are any
-  # purchase_create[:subscriptions] = subscriptions if subscriptions&.any?
-  
-  # Line Items - TBAdded
-  # line_items = params['items']&.map do |item_params|
-  #   {
-  #     item_code: item_params['item-code'],
-  #     revenue_schedule_type: 'at_invoice'
-  #   }
-  # end
-  # # Add line_items to the request if there are any
-  # purchase_create[:line_items] = line_items if line_items&.any?
 
   begin
     purchase = client.create_purchase(body: purchase_create)
@@ -141,7 +123,10 @@ post '/api/purchases/new' do
     redirect "/3d-secure/authenticate.html##{hash_params}"
   rescue Recurly::Errors::APIError => e
     # Here we may wish to log the API error and send the customer to an appropriate URL, perhaps including an error message
-    handle_error e
+    handle_error({
+      plan_code: params['plan-code'],
+      error: e.message
+    })
   end
 end
 
