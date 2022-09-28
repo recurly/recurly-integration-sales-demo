@@ -3,26 +3,16 @@ const { plans, publicKey } = window.recurlyConfig;
 
 recurly.configure(publicKey);
 
-const currentPlan = window.location.search.replace("?plan=","");
-window.localStorage.setItem('plan_code', currentPlan);
-const planCode = window.localStorage.getItem('plan_code');
+const { plan_code: selectedPlanCode, error } = hashParams();
 
-const planName = plans.reduce((name, allPlans) => {
-	if (allPlans.code === planCode) {
-		name = allPlans.name;
-	}
-	return name;
-}, '');
-
-// const { plan_name: planName, plan_code: planCode } = hashParams();
-
+const selectedPlan = plans.filter((plan) => plan.code == selectedPlanCode)[0]
 
 const planSelect = document.getElementById('plan-select');
-planSelect.innerHTML = `<option value="${planCode}" name="plan-code">${planName}</option>`;
+planSelect.innerHTML = `<option value="${selectedPlan?.code}" name="plan-code">${selectedPlan?.name}</option>`;
 planSelect.style.display = 'none';
 
 const planDiv = document.getElementById('plan');
-planDiv.innerHTML = `<h2 value="${planCode}" name="plan-code">${planName}</h2>`;
+planDiv.innerHTML = `<h2 value="${selectedPlan?.code}" name="plan-code">${selectedPlan?.name}</h2>`;
 
 // Create a CardElement
 const elements = recurly.Elements();
@@ -41,7 +31,10 @@ const subscribeBtn = document.getElementById('subscribe');
 const recurlyForm = document.querySelector('#form');
 
 // When a customer hits their 'enter' key while using the card element
-cardNumberElement.on('submit', (event) => recurlyForm.submit());
+cardNumberElement.on('submit', (event) => {
+  event.preventDefault();
+  recurlyForm.submit();
+});
 
 recurlyForm.addEventListener('submit', function (event) {
 	event.preventDefault();
@@ -49,7 +42,7 @@ recurlyForm.addEventListener('submit', function (event) {
 
 	recurly.token(elements, form, async function (err, token) {
 		document.getElementById('errors').innerHTML = '';
-		if (err) error(err);
+		if (err) handleError(err);
 		else {
 			console.log('SUCCESS: ', token);
 			form.submit();
@@ -57,10 +50,8 @@ recurlyForm.addEventListener('submit', function (event) {
 	});
 });
 
-const params = hashParams();
-
-if (Object.keys(params).length !== 0) {
-  const parsedParams = decodeURIComponent(params.error).replace(/\+/g, ' ');
+if (error) {
+  const parsedParams = decodeURIComponent(error).replace(/\+/g, ' ');
   document.getElementById('errors').innerHTML += `<h5>${parsedParams}</h5>`
 }
 
@@ -78,7 +69,7 @@ pricing.on('set.plan', function (plan) {
 	console.info('set.plan: ', plan);
 });
 
-const error = (err) => {
+const handleError = (err) => {
 	console && console.error(err);
 
 	err.details.forEach((detail) => {
@@ -86,6 +77,7 @@ const error = (err) => {
 		const errorEle = document.getElementById(field);
 
 		if (errorEle) {
+      console.log(errorEle)
 			errorEle.defaultValue = messages.join(', ');
 			errorEle.style.borderColor = 'red';
 		} else {
