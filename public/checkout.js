@@ -12,7 +12,7 @@ planSelect.innerHTML = `<option value="${selectedPlan?.code}" name="plan-code">$
 planSelect.style.display = 'none';
 
 const planDiv = document.getElementById('plan');
-planDiv.innerHTML = `<h2 value="${selectedPlan?.code}" name="plan-code">${selectedPlan?.name}</h2>`;
+planDiv.innerHTML = `<h2 value="${selectedPlan?.code}" name="plan-code">Thank you for selecting the ${selectedPlan?.name} Plan. Your best friend will love it!</h2>`;
 
 // Create a CardElement
 const elements = recurly.Elements();
@@ -32,8 +32,8 @@ const recurlyForm = document.querySelector('#form');
 
 // When a customer hits their 'enter' key while using the card element
 cardNumberElement.on('submit', (event) => {
-  event.preventDefault();
-  recurlyForm.submit();
+	event.preventDefault();
+	recurlyForm.submit();
 });
 
 recurlyForm.addEventListener('submit', function (event) {
@@ -51,8 +51,8 @@ recurlyForm.addEventListener('submit', function (event) {
 });
 
 if (error) {
-  const parsedParams = decodeURIComponent(error).replace(/\+/g, ' ');
-  document.getElementById('errors').innerHTML += `<h5>${parsedParams}</h5>`
+	const parsedParams = decodeURIComponent(error).replace(/\+/g, ' ');
+	document.getElementById('errors').innerHTML += `<h5>${parsedParams}</h5>`
 }
 
 const pricing = recurly.Pricing.Checkout();
@@ -77,7 +77,7 @@ const handleError = (err) => {
 		const errorEle = document.getElementById(field);
 
 		if (errorEle) {
-      console.log(errorEle)
+			console.log(errorEle)
 			errorEle.defaultValue = messages.join(', ');
 			errorEle.style.borderColor = 'red';
 		} else {

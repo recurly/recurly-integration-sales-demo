@@ -1,3 +1,4 @@
 .env
 /api/node/node_modules/
 /api/ruby/Gemfile.lock
+.DS_Store
