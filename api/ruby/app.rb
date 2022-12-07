@@ -99,7 +99,7 @@ post '/api/purchases/new' do
         country: params['country'],
         region: params['region']
       },
-      # billing_info: billing_info
+      billing_info: billing_info
     },
     subscriptions: [
       { plan_code: params['plan-code'] }
