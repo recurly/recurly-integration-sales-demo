@@ -18,7 +18,7 @@ set :public_folder, '../../public'
 
 enable :logging
 
-client = Recurly::Client.new(api_key: ENV['RECURLY_API_KEY'])
+client = Recurly::Client.new(api_key: ENV['RECURLY_API_KEY'], region: :eu)
 
 # Generic error handling
 # Here we log the API error and send the
@@ -130,25 +130,63 @@ post '/api/purchases/new' do
   end
 end
 
-get '/config' do
-  plans = [].tap do |plans|
-    client.list_plans(params: {limit: 200, state: 'active'}).each do |plan|
-      plans << { name: plan.name, unit_amount: plan.currencies[0].unit_amount, code: plan.code, currency: plan.currencies[0].currency}
-    end
-  end
+# get '/config' do
+#   plans = [].tap do |plans|
+#     client.list_plans(params: {limit: 200, state: 'active'}).each do |plan|
+#       plans << { name: plan.name, unit_amount: plan.currencies[0].unit_amount, code: plan.code, currency: plan.currencies[0].currency}
+#     end
+#   end
 
-  config = {
-    publicKey: ENV['RECURLY_PUBLIC_KEY'],
-    plans: plans
-  }
-  content_type :js
-  "window.recurlyConfig = #{config.to_json}"
-end
+#   config = {
+#     publicKey: ENV['RECURLY_PUBLIC_KEY'],
+#     plans: plans
+#   }
+#   content_type :js
+#   "window.recurlyConfig = #{config.to_json}"
+# end
 
 get '/checkout' do
   send_file File.join(settings.public_folder, 'checkout.html') 
 end
 
 get '/' do
-  send_file File.join(settings.public_folder, 'plans.html')
+  send_file File.join(settings.public_folder, 'welcome.html')
 end
+
+get '/plans' do
+ 
+  plans = [].tap do |plans| 
+    client.list_plans(params: {limit: 200, state: 'active'}).each do |plan|
+      plan.currencies.each do |currency|
+        # if currency.unit_amount > 0 
+        plans << { name: plan.name, unit_amount: currency.unit_amount, code: plan.code, currency: currency.currency }
+        # end
+      end
+    end
+  end
+
+  currencies = plans.map {|plan| plan[:currency]}.uniq
+
+
+  config = {
+    publicKey: ENV['RECURLY_PUBLIC_KEY'],
+    plans: plans,
+    currencies: currencies
+  }
+  content_type 'js'
+  "window.recurlyConfig = #{config.to_json}"
+
+  
+end
+
+
+
+
+#   content_type :json
+#   config.to_json
+# end
+
+
+
+
+

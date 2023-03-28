@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="config.css"> -->
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://js.recurly.com/v4/recurly.js"></script>
+    <link href="https://js.recurly.com/v4/recurly.css" rel="stylesheet" />
+    <!-- Bootstrap CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <title>Recurly JS Welcome Page</title>
+</head>
+
+<body>
+
+    <div class="container-fluid p-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-5 border content rounded">
+                    <div class="py-4">
+                        <h1> Recurly JS Welcome Page </h1>
+                    </div>
+                    <div>
+                        <figure>
+                            <img src="images/Recurly_Keep_A_Good_Thing_Growing.png" class="img-fluid"
+                                alt="Keep A Good Thing Growing">
+                            <figcaption>Keep A Good Thing Growing</figcaption>
+                        </figure>
+                    </div>
+                    <div class="py-2">
+                        <h3>Introduction</h3>
+                        <p>Welcome to Recurly JS! Our interactive platform is designed to show you just how easy it is
+                            to integrate with our Recurly.js API. Before proceeding, be sure to follow all instructions
+                            on
+                            our GitHub repository to ensure your plans populate properly.
+                        </p>
+                    </div>
+                    <div class="py-2">
+                        <h3> Welcome Page</h3>
+                        <p> Now that you're ready to get started, let's make your experience as seamless as possible. We
+                            want you to feel at home, so we've given you a few customization options on our welcome
+                            page.
+                            Choose a background color and secondary color to fill in sections of the webpage. You can
+                            also
+                            add your brand name, brand message, and logo to truly make it your own.
+                        </p>
+                    </div>
+                    <div class="py-2">
+                        <h3> Plans</h3>
+                        <p> On the plans page, you'll find a list of plans that you've created in your Recurly domain,
+                            including pricing, plan name, and plan code. Our platform is API-friendly, so you can easily
+                            integrate it into your existing system.
+                        </p>
+                    </div>
+                    <div class="py-2">
+                        <h3> Checkout</h3>
+                        <p> Moving on to the checkout page, we make it easy for your customers to enter their relevant
+                            details for purchasing a subscription. When the payment form is submitted, Recurly.js sends
+                            the
+                            payment information to be encrypted and stored securely. We provide you with an
+                            authorization
+                            token to complete the subscription process using our API, which means you never have to
+                            handle
+                            any sensitive information, and your PCI scope is significantly reduced. Plus, we offer
+                            several
+                            payment methods and 3DS compatibility (if you use the correct payment methods).
+                        </p>
+                    </div>
+                    <div class="py-2">
+                        <h3> Success</h3>
+                        <p>Finally, our success page confirms that the user has successfully subscribed to their
+                            selected
+                            plan. It's like a confirmation message you would display on your own website. Feel free to
+                            check
+                            your Recurly domain to see the new customer and their details in your system. Wow!</p>
+                    </div>
+                    <div class="py-2">
+                        <h3> Final words</h3>
+                        <p>We hope you enjoy using Recurly JS and that it helps streamline your subscription process. If
+                            you
+                            have any questions, don't hesitate to reach out to our support team. Happy integrating!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-5 border content rounded">
+                    <div class="p-4">
+                        <h3>Lets start off by choosing a background colour</h3>
+                        <label for="color">Choose A Background Colour</label>
+                        <br>
+                        <input type="color" id="color" />
+                    </div>
+                    <div class="p-4 ">
+                        <h3>Lets start off by choosing a secondary colour</h3>
+                        <p>You can leave this as it is or change it to the same as your primary colour <br> We use this
+                            colour to fill in different sections.</p>
+                        <label for="content-color">Choose A Second Colour</label>
+                        <br>
+                        <input type="color" id="content-color" />
+                    </div>
+                    <div class="p-4">
+                        <h3>Enter your brand name</h3>
+                        <label for="company"> Enter Brand Name Here</label>
+                        <input type="text" id="company" />
+                        <button type="button" id="ConfirmBrand">Confirm</button>
+                    </div>
+                    <div class="p-4">
+                        <h3>Enter your brand slogan</h3>
+                        <label for="companyMessage"> Enter Brand Message Here</label>
+                        <input type="text" id="companyMessage" />
+                        <button type="button" id="ConfirmBrandMessage"">Confirm</button>
+                </div>
+                <div class=" p-4">
+                            <h3>Upload your logo</h3>
+                            <div>
+                                <input type="file" name="" id="thumbnail">
+                            </div>
+                            <br>
+                            <button id="uploadBtn">Upload</button>
+                            <!-- <img id="preview" src=""> -->
+                    </div>
+                    <div class="p-4 border">
+                        <img id="preview" src="">
+                        <h1 id="nameBrand"></h1>
+                        <p id="brandMessage"></p>
+
+
+                    </div>
+                    <div class="p-4">
+                        <button id="clearBtn">Clear Settings</button>
+                    </div>
+                    <div class="p-4">
+                        <button id="plansBtn">Go to plans!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="welcome.js"></script>
+</body>
+
+</html>
