@@ -1,0 +1,17 @@
+body {
+    text-align: center;
+    border: 5px solid
+}
+
+#nav {
+    list-style: none;
+}
+
+#isWorking {
+    color: lightcyan;
+}
+
+#image {
+    width: 400px;
+    height: auto;
+}

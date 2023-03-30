@@ -3,14 +3,48 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>R.js example</title>
-  <script src="/config"></script>
+  <script src="/plans"></script>
   <link rel="stylesheet" href="style.css" />
   <script src="https://js.recurly.com/v4/recurly.js"></script>
   <link href="https://js.recurly.com/v4/recurly.css" rel="stylesheet" />
+    <!-- Bootstrap CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 </head>
 <body>
+
+  <div class="container">
+
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+
+      <div class="float-left">
+        <img id="preview" src="">
+        <h1 id="nameBrand"></h1>
+        <p id="brandMessage"></p>
+      </div>
+
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <svg class="bi me-2" width="40" height="32">
+          <use xlink:href="#bootstrap"></use>
+        </svg>
+        <!-- <span class="fs-4"><img src="images/croppedcakes-removebg-preview.png" width="280"></span> -->
+      </a>
+
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+      </ul>
+    </header>
+    </div>
+
+  <div class="container content d-flex align-items-center vh-50 p-5">
   <div id="success">
   </div>
+</div>
+  <script type="module" src="storage.js"></script>
   <script type="module" src="success.js"></script>
 </body>
 </html>
