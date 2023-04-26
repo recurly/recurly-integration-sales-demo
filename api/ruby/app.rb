@@ -150,7 +150,7 @@ get '/checkout' do
 end
 
 get '/' do
-  headers['Cache-Caontrol'] = 'no-cache, no-store, must-revalidate'
+  headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
   send_file File.join(settings.public_folder, 'welcome.html')
 end
 
