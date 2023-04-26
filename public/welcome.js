@@ -1,34 +1,44 @@
 // background colour 
 
-window.addEventListener('load', (event) => {
-    // console.log('Page loaded!');
-    // gets the background colour from local storage - or use #ffffff
-    let selectedColor = localStorage.getItem('bkgdcolor') ? localStorage.getItem('bkgdcolor') : '#ffffff';
-    // console.log('Selected color:', selectedColor);
-    document.querySelector('body').style.backgroundColor = selectedColor;
-    document.querySelector('#color').value = selectedColor;
+const colourSelector = document.getElementById("colour-selector")
 
-    document.querySelector('#color').addEventListener('change', () => {
-        let color = this.value;
-        // console.log('New color selected:', color);
-        document.querySelector('body').style.backgroundColor = color;
-        localStorage.setItem('bkgdcolor', color);
-    });
-});
+colourSelector.addEventListener("input",() => {
+    let selectedColour = colourSelector.value
+    document.body.style.backgroundColor = selectedColour
+    localStorage.setItem("selectedColour", selectedColour)
+})
+
+const storedColour = localStorage.getItem("selectedColour")
+
+if (storedColour)
+    document.body.style.backgroundColor = storedColour
+else    
+    document.body.style.backgroundColor = 'purple'
 
 
 // content colour 
-window.addEventListener('load', (event) => {
-    let selectedColorTwo = localStorage.getItem('contentColor') ? localStorage.getItem('contentColor') : '#ffffff';
-    document.querySelectorAll('.content').forEach(el => el.style.backgroundColor = selectedColorTwo);
-    document.querySelector('#content-color').value = selectedColorTwo;
 
-    document.querySelector('#content-color').addEventListener('change', () => {
-        let color = this.value;
-        document.querySelectorAll('.content').forEach(el => el.style.backgroundColor = color);
-        localStorage.setItem('contentColor', color);
-    });
+const contentColourSelect = document.getElementById("content-color");
+
+contentColourSelect.addEventListener('change', () => {
+  const selectedContentColour = contentColourSelect.value;
+  document.querySelectorAll('.content').forEach(content => {
+    content.style.backgroundColor = selectedContentColour;
+  });
+  localStorage.setItem('selectedContentColour', selectedContentColour);
 });
+
+const selectedStoredColour = localStorage.getItem('selectedContentColour');
+
+if (selectedStoredColour) {
+  document.querySelectorAll('.content').forEach(content => {
+    content.style.backgroundColor = selectedStoredColour;
+  });
+} else {
+  document.querySelectorAll('.content').forEach(content => {
+    content.style.backgroundColor = 'white';
+  });
+}
 
 // brand name
 window.addEventListener('load', (event) => {
@@ -59,11 +69,38 @@ document.getElementById('ConfirmBrandMessage').addEventListener('click', () => {
 const input = document.getElementById('thumbnail');
 input.addEventListener('change', (event) => {
     const image = event.target.files[0];
+    if (image.size > 2 * 1024 * 1024) {
+        alert('Please upload an image that is less than 2MB');
+        return;
+    }
     const reader = new FileReader();
     reader.readAsDataURL(image);
     reader.addEventListener("load", () => {
-        console.log(reader.result);
-        localStorage.setItem("thumbnail", reader.result);
+        const img = new Image();
+        img.src = reader.result;
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            const maxDimension = 100;
+            if (width > height) {
+                if (width > maxDimension) {
+                    height *= maxDimension / width;
+                    width = maxDimension;
+                }
+            } else {
+                if (height > maxDimension) {
+                    width *= maxDimension / height;
+                    height = maxDimension;
+                }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const context = canvas.getContext('2d');
+            context.drawImage(img, 0, 0, width, height);
+            const resizedImage = canvas.toDataURL('image/jpeg', 0.7);
+            localStorage.setItem("thumbnail", resizedImage);
+        };
     });
 });
 
@@ -80,8 +117,8 @@ window.addEventListener('load', (event) => {
 });
 
 function clearLocalStaorageKeys() {
-    localStorage.removeItem("bkgdcolor");
-    localStorage.removeItem("contentColor");
+    localStorage.removeItem("selectedColour");
+    localStorage.removeItem("selectedContentColour");
     localStorage.removeItem("brand");
     localStorage.removeItem("brandm");
     localStorage.removeItem("thumbnail");
