@@ -1,9 +1,28 @@
+window.addEventListener('load', (event) => {
+  console.log("3456");
+  const storedColour = localStorage.getItem("selectedColour")
+  console.log(storedColour);
+
+if (storedColour)
+    document.body.style.backgroundColor = storedColour
+else    
+    document.body.style.backgroundColor = 'purple'
+
+});
 
 window.addEventListener('load', (event) => {
-  console.log('Page loaded!');
-  let selectedColor = localStorage.getItem('bkgdcolor') ? localStorage.getItem('bkgdcolor') : '#ffffff';
-  console.log('Selected color:', selectedColor);
-  document.querySelector('body').style.backgroundColor = selectedColor;
+  console.log("435");
+  const selectedStoredColour = localStorage.getItem('selectedContentColour');
+  console.log(selectedStoredColour);
+  if (selectedStoredColour) {
+    document.querySelectorAll('.content').forEach(content => {
+      content.style.backgroundColor = selectedStoredColour;
+    });
+  } else {
+    document.querySelectorAll('.content').forEach(content => {
+      content.style.backgroundColor = 'yellow';
+    });
+  }
 
 });
 
