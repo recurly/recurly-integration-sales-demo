@@ -20,9 +20,9 @@ main {
   margin: 1rem auto;
 }
 
-main.checkout-form {
-  width: auto;
+.checkout-form {
   max-width: 42rem;
+  margin: 0 auto;
 }
 
 .row input[type="text"],

@@ -17,22 +17,14 @@
 </head>
 
 <body>
-  <div class="container">
+  <div class="container-fluid p-5">
 
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-
-      <div class="float-left">
-        <img id="preview" src="">
-        <h1 id="nameBrand"></h1>
-        <p id="brandMessage"></p>
+    <header class="d-flex flex-wrap align-items-center justify-content-between pb-4 mb-4 border-bottom">
+      <div class="d-flex align-items-center gap-3">
+        <img id="preview" src="" style="max-height: 40px; width: auto;">
+        <h1 id="nameBrand" class="mb-0 fs-4"></h1>
+        <p id="brandMessage" class="mb-0 text-muted"></p>
       </div>
-
-      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-        <svg class="bi me-2" width="40" height="32">
-          <use xlink:href="#bootstrap"></use>
-        </svg>
-      </a>
-
       <ul class="nav nav-pills">
         <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
         <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
@@ -41,9 +33,8 @@
         <li class="nav-item"><a href="#" class="nav-link">About</a></li>
       </ul>
     </header>
-    </div>
-  <main class="checkout-form">
-    <section class="px-4 py-5 checkout border border-info border-4 rounded content">
+
+    <div class="p-5 border content rounded checkout-form">
       <form id="form" method="post" action="/api/purchases/new">
         <div id="plan-container" class="mb-3">
           <div id="plan"></div>
@@ -123,8 +114,9 @@
         </div>
         <button id="subscribe">Subscribe</button>
       </form>
-    </section>
-  </main>
+    </div>
+
+  </div>
   <script type="module" src="storage.js"></script>
   <script type="module" src="checkout.js"></script>
 </body>
