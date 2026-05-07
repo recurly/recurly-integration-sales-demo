@@ -12,8 +12,8 @@ const storedColour = localStorage.getItem("selectedColour")
 
 if (storedColour)
     document.body.style.backgroundColor = storedColour
-else    
-    document.body.style.backgroundColor = 'purple'
+else
+    document.body.style.backgroundColor = '#FFFDF2'
 
 
 // content colour 
@@ -36,7 +36,7 @@ if (selectedStoredColour) {
   });
 } else {
   document.querySelectorAll('.content').forEach(content => {
-    content.style.backgroundColor = 'white';
+    content.style.backgroundColor = '#F1EFE3';
   });
 }
 
