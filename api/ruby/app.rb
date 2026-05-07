@@ -2,7 +2,6 @@
 require 'sinatra'
 require 'json'
 require 'recurly'
-require 'pry'
 require 'dotenv'
 require 'json'
 Dotenv.load('../../.env')
@@ -18,7 +17,7 @@ set :public_folder, '../../public'
 
 enable :logging
 
-client = Recurly::Client.new(api_key: ENV['RECURLY_API_KEY'], region: :eu)
+client = Recurly::Client.new(api_key: ENV['RECURLY_API_KEY'], region: :us)
 
 # Generic error handling
 # Here we log the API error and send the

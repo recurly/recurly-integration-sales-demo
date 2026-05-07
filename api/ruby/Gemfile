@@ -4,3 +4,5 @@ gem 'sinatra'
 gem 'recurly'
 gem 'dotenv'
 gem 'puma'
+
+gem "rackup", "~> 2.3"

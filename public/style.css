@@ -20,6 +20,16 @@ main {
   margin: 1rem auto;
 }
 
+main.checkout-form {
+  width: auto;
+  max-width: 42rem;
+}
+
+.row input[type="text"],
+.row .recurly-element {
+  margin-bottom: 0;
+}
+
 section {
   text-align: center;
 }
@@ -75,6 +85,16 @@ select {
   padding: 0.5rem;
   margin: 0 0 1rem;
   display: block;
+}
+
+select.form-control {
+  border: 2px solid #CCC9B8 !important;
+  background: white !important;
+  box-shadow: none !important;
+  color: #807D73 !important;
+  padding: 0.5rem !important;
+  height: auto !important;
+  min-height: 2.75rem;
 }
 
 input:focus {
@@ -240,6 +260,16 @@ li {
 }
 
 .btn-primary {
+  --bs-btn-bg: #FFD706;
+  --bs-btn-border-color: #FFD706;
+  --bs-btn-color: #0D0D0B;
+  --bs-btn-hover-bg: #CEAE12;
+  --bs-btn-hover-border-color: #CEAE12;
+  --bs-btn-hover-color: #0D0D0B;
+  --bs-btn-active-bg: #CEAE12;
+  --bs-btn-active-border-color: #CEAE12;
+  --bs-btn-active-color: #0D0D0B;
+  --bs-btn-focus-shadow-rgb: 255, 215, 6;
   background-color: #FFD706;
   border-color: #FFD706;
   color: #0D0D0B;

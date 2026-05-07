@@ -11,13 +11,7 @@ const currencySelect = document.querySelector('.js-currency-select');
 
 function populatePlans(currency) {
   const planOptions = plans.filter(plan => plan.currency === currency).map(plan => `
-  <div class="recurly-plan feature col border border-primary border-4 rounded">
-    <div
-      class=" feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
-      <svg class="bi" width="1em" height="1em">
-        <use xlink:href="#collection"></use>
-      </svg>
-    </div>
+  <div class="recurly-plan feature col border rounded bg-white p-3">
     <input type="radio" class="plans" id="${plan.code}" name="plan_code" value="${plan.code}" >
     <h3 class="fs-2" id="${plan.code}">${plan.name}</h3>
     <h4 id="$${plan.unit_amount}">${plan.unit_amount} ${plan.currency}</h4>
