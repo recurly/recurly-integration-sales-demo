@@ -2,6 +2,7 @@
 require 'sinatra'
 require 'json'
 require 'recurly'
+require 'stripe'
 require 'dotenv'
 require 'json'
 Dotenv.load('../../.env')
@@ -80,11 +81,31 @@ post '/api/purchases/new' do
   recurly_account_code = params['recurly-account-code'] || SecureRandom.uuid
 
   recurly_token_id = params['recurly-token']
-  billing_info = { token_id: recurly_token_id }
-  # Optionally add a 3D Secure token if one is present. You only need to do this
-  # if you are integrating with Recurly's 3D Secure support
-  unless params.fetch('three-d-secure-token', '').empty?
-    billing_info['three_d_secure_action_result_token_id'] = params['three-d-secure-token']
+  stripe_confirmation_token = params['stripe-confirmation-token']
+
+  billing_info = if stripe_confirmation_token && !stripe_confirmation_token.empty?
+    {
+      payment_gateway_references: [{
+        token: stripe_confirmation_token,
+        reference_type: 'stripe_confirmation_token'
+      }],
+      first_name: params['first-name'],
+      last_name: params['last-name'],
+      address: {
+        street1: params['address1'],
+        street2: params['address2'],
+        city: params['city'],
+        region: params['region'],
+        postal_code: params['postal-code'],
+        country: params['country']
+      }
+    }
+  else
+    info = { token_id: recurly_token_id }
+    unless params.fetch('three-d-secure-token', '').empty?
+      info['three_d_secure_action_result_token_id'] = params['three-d-secure-token']
+    end
+    info
   end
 
   purchase_create = {
@@ -114,14 +135,59 @@ post '/api/purchases/new' do
     })
   rescue Recurly::Errors::TransactionError => e
     txn_error = e.recurly_error.transaction_error
-    hash_params = url_params({
-      token_id: recurly_token_id,
-      action_token_id: txn_error.three_d_secure_action_token_id,
-      account_code: recurly_account_code
-    })
-    redirect "/3d-secure/authenticate.html##{hash_params}"
+    logger.error "TransactionError: #{e.message} | 3DS token: #{txn_error.three_d_secure_action_token_id} | detail: #{txn_error.inspect}"
+    if txn_error.three_d_secure_action_token_id
+      hash_params = url_params({
+        token_id: recurly_token_id,
+        action_token_id: txn_error.three_d_secure_action_token_id,
+        account_code: recurly_account_code
+      })
+      redirect "/3d-secure/authenticate.html##{hash_params}"
+    else
+      handle_error({ plan_code: params['plan-code'], error: e.message })
+    end
   rescue Recurly::Errors::APIError => e
     # Here we may wish to log the API error and send the customer to an appropriate URL, perhaps including an error message
+    handle_error({
+      plan_code: params['plan-code'],
+      error: e.message
+    })
+  end
+end
+
+post '/api/stripe/purchases/new' do
+  logger.info "Stripe purchase: #{params['first-name']} #{params['last-name']}"
+  Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+
+  payment_method_id = params['stripe-payment-method']
+  amount = params['plan-amount'].to_i
+  amount = 100 if amount <= 0
+  currency = params['plan-currency']&.downcase || 'usd'
+
+  begin
+    customer = Stripe::Customer.create({
+      name: "#{params['first-name']} #{params['last-name']}",
+      payment_method: payment_method_id
+    })
+
+    Stripe::PaymentIntent.create({
+      amount: amount,
+      currency: currency,
+      customer: customer.id,
+      payment_method: payment_method_id,
+      confirm: true,
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: 'never'
+      }
+    })
+
+    handle_success({
+      account_code: customer.id,
+      first_name: params['first-name'],
+      last_name: params['last-name']
+    })
+  rescue Stripe::StripeError => e
     handle_error({
       plan_code: params['plan-code'],
       error: e.message
@@ -170,6 +236,8 @@ get '/plans' do
 
   config = {
     publicKey: ENV['RECURLY_PUBLIC_KEY'],
+    stripePublishableKey: ENV['STRIPE_PUBLISHABLE_KEY'],
+    stripeAccountId: ENV['STRIPE_ACCOUNT_ID'],
     plans: plans,
     currencies: currencies
   }

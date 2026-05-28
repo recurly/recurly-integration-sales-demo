@@ -21,7 +21,7 @@ main {
 }
 
 .checkout-form {
-  max-width: 42rem;
+  max-width: 64rem;
   margin: 0 auto;
 }
 
@@ -295,4 +295,70 @@ li {
 
 .border-bottom {
   border-color: #CCC9B8 !important;
+}
+
+/* Payment processor panels */
+.payment-panel {
+  border: 2px solid #CCC9B8;
+  border-radius: 4px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: border-color 0.3s, opacity 0.3s;
+  opacity: 0.55;
+}
+
+.payment-panel.active {
+  border-color: #FFD706;
+  opacity: 1;
+}
+
+.payment-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.payment-panel-badge {
+  font-size: x-small;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+}
+
+.recurly-badge {
+  background: #FFD706;
+  color: #0D0D0B;
+}
+
+.stripe-badge {
+  background: #635BFF;
+  color: #fff;
+}
+
+/* Stripe Elements — match Recurly element appearance */
+.stripe-element {
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.3s;
+  outline: none;
+  border: 2px solid #CCC9B8;
+  box-shadow: none;
+  background: transparent;
+  width: 100%;
+  height: 42px;
+  margin: 0 0 1rem;
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.stripe-element.StripeElement--focus {
+  border-color: #0D0D0B;
+}
+
+.stripe-element.StripeElement--invalid {
+  border-color: #FF5810;
 }

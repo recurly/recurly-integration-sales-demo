@@ -13,6 +13,7 @@
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
   <script src="https://js.recurly.com/v4/recurly.js"></script>
   <link href="https://js.recurly.com/v4/recurly.css" rel="stylesheet" />
+  <script src="https://js.stripe.com/v3/"></script>
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -81,22 +82,44 @@
         </div>
 
         <input type="hidden" data-recurly="token" name="recurly-token">
+        <input type="hidden" id="stripe-confirmation-token" name="stripe-confirmation-token">
+        <input type="hidden" id="active-processor" name="processor" value="recurly">
+        <input type="hidden" id="plan-amount" name="plan-amount">
+        <input type="hidden" id="plan-currency" name="plan-currency">
 
-        <div id="recurly-elements">
-          <label for="recurly-elements-number">Card Number</label>
-          <div id="recurly-elements-number" class="mb-3"></div>
-          <div class="row g-3">
-            <div class="col-4">
-              <label for="recurly-elements-month">Month</label>
-              <div id="recurly-elements-month"></div>
+        <div class="row g-3 mb-3" id="payment-panels">
+          <div class="col-12" id="recurly-panel">
+            <div class="payment-panel active">
+              <div class="payment-panel-header">
+                <span class="payment-panel-badge recurly-badge">Recurly</span>
+                <h6 class="mb-0">Pay with Recurly</h6>
+              </div>
+              <label>Card Number</label>
+              <div id="recurly-elements-number" class="mb-3"></div>
+              <div class="row g-2">
+                <div class="col-4">
+                  <label>Month</label>
+                  <div id="recurly-elements-month"></div>
+                </div>
+                <div class="col-4">
+                  <label>Year</label>
+                  <div id="recurly-elements-year"></div>
+                </div>
+                <div class="col-4">
+                  <label>CVV</label>
+                  <div id="recurly-elements-cvv"></div>
+                </div>
+              </div>
             </div>
-            <div class="col-4">
-              <label for="recurly-elements-year">Year</label>
-              <div id="recurly-elements-year"></div>
-            </div>
-            <div class="col-4">
-              <label for="recurly-elements-cvv">CVV</label>
-              <div id="recurly-elements-cvv"></div>
+          </div>
+
+          <div class="col-12" id="stripe-panel">
+            <div class="payment-panel">
+              <div class="payment-panel-header">
+                <span class="payment-panel-badge stripe-badge">Stripe</span>
+                <h6 class="mb-0">Pay with Stripe</h6>
+              </div>
+              <div id="stripe-payment-element"></div>
             </div>
           </div>
         </div>
