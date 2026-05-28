@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 * {
   box-sizing: border-box;
 }
@@ -7,9 +9,9 @@ html {
 }
 
 body {
-    /* background: linear-gradient(-30deg, #E1E3E6, #EBEFF8); */
-
-  font-family: 'Open Sans', system-ui, sans-serif;
+  background-color: #FFFDF2;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  color: #0D0D0B;
   margin: 0;
 }
 
@@ -18,23 +20,39 @@ main {
   margin: 1rem auto;
 }
 
+.checkout-form {
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.row input[type="text"],
+.row .recurly-element {
+  margin-bottom: 0;
+}
+
 section {
   text-align: center;
 }
 
 section.errors {
-  color: #E43C29;
+  color: #FF5810;
 }
 
 h1 {
-  font-weight: normal;
+  font-weight: 700;
+  color: #0D0D0B;
+}
+
+h2, h3, h4 {
+  color: #343F4B;
+  font-weight: 500;
 }
 
 label,
 .label {
-  color: #2C0730;
+  color: #0D0D0B;
   font-size: small;
-  font-weight: bold;
+  font-weight: 600;
   text-align: left;
   text-transform: uppercase;
   margin: 0 0 0.25rem;
@@ -44,7 +62,6 @@ label,
 input[type="colour"] {
   width: 100%;
   box-sizing: border-box;
-
 }
 
 input[type='radio']+label {
@@ -58,26 +75,35 @@ select {
   appearance: none;
   outline: none;
   box-shadow: none;
-  /* border-radius: 0; */
-  border: 2px solid #C2C2C2;
+  border: 2px solid #CCC9B8;
   background: transparent;
-  color: #c2c2c2;
+  color: #807D73;
   font-family: inherit;
   font-size: inherit;
-  font-weight: bold;
+  font-weight: 600;
   width: 100%;
   padding: 0.5rem;
   margin: 0 0 1rem;
   display: block;
 }
 
+select.form-control {
+  border: 2px solid #CCC9B8 !important;
+  background: white !important;
+  box-shadow: none !important;
+  color: #807D73 !important;
+  padding: 0.5rem !important;
+  height: auto !important;
+  min-height: 2.75rem;
+}
+
 input:focus {
-  border-color: currentColor;
-  color: #2C0730;
+  border-color: #0D0D0B;
+  color: #0D0D0B;
 }
 
 input.error {
-  border-color: #E43C29;
+  border-color: #FF5810;
 }
 
 button {
@@ -86,14 +112,18 @@ button {
   cursor: pointer;
   outline: none;
   border: none;
-  background: #2C0730;
-  color: #F5F5F5;
+  background: #FFD706;
+  color: #0D0D0B;
   padding: 1rem;
   font-family: inherit;
   font-size: inherit;
-  font-weight: bold;
+  font-weight: 700;
   letter-spacing: 1px;
   width: 100%;
+}
+
+button:hover {
+  background: #CEAE12;
 }
 
 button:disabled {
@@ -101,7 +131,7 @@ button:disabled {
 }
 
 a {
-  color: #2C0730;
+  color: #0D0D0B;
 }
 
 ul {
@@ -115,10 +145,11 @@ li {
 
 .logo {
   transition: all 0.5s;
-  background: #F5F5F5;
-  color: #2C0730;
+  background: #FFD706;
+  color: #0D0D0B;
   border-radius: 9rem;
   font-size: x-large;
+  font-weight: 800;
   letter-spacing: 1px;
   text-align: center;
   width: 9rem;
@@ -143,25 +174,19 @@ li {
   }
 }
 
-/* .choose {
-  background: url("images/birthday-dog.png") no-repeat;
-  min-height: 500px;
-  background-color: #f5f5f5;
-} */
-
 .recurly-element {
   appearance: none;
   -webkit-appearance: none;
   transition: border-color 0.3s;
   outline: none;
   border-radius: 0;
-  border: 2px solid #c2c2c2;
+  border: 2px solid #CCC9B8;
   box-shadow: none;
   background: transparent;
-  color: #c2c2c2;
+  color: #807D73;
   font-family: inherit;
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 600;
   width: 100%;
   height: 42px;
   margin: 0 0 1rem;
@@ -169,13 +194,13 @@ li {
 }
 
 .recurly-element-focus {
-  border-color: #2c0730;
-  color: #2c0730;
+  border-color: #0D0D0B;
+  color: #0D0D0B;
   z-index: 10;
 }
 
 .recurly-element-invalid {
-  border: 2px solid #E43C29;
+  border: 2px solid #FF5810;
 }
 
 .recurly-plan {
@@ -208,13 +233,132 @@ li {
   margin: 0.5rem 0;
 }
 
-
 .text-muted {
-  color: gray;
+  color: #807D73;
   font-size: x-small;
   margin: 0.25rem 0;
 }
 
 #errors {
-  color: #E43C29;
+  color: #FF5810;
+}
+
+/* Bootstrap overrides for Recurly brand */
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+  background-color: #FFD706;
+  color: #0D0D0B;
+  font-weight: 700;
+}
+
+.nav-pills .nav-link {
+  color: #0D0D0B;
+}
+
+.nav-pills .nav-link:hover {
+  color: #32312D;
+}
+
+.btn-primary {
+  --bs-btn-bg: #FFD706;
+  --bs-btn-border-color: #FFD706;
+  --bs-btn-color: #0D0D0B;
+  --bs-btn-hover-bg: #CEAE12;
+  --bs-btn-hover-border-color: #CEAE12;
+  --bs-btn-hover-color: #0D0D0B;
+  --bs-btn-active-bg: #CEAE12;
+  --bs-btn-active-border-color: #CEAE12;
+  --bs-btn-active-color: #0D0D0B;
+  --bs-btn-focus-shadow-rgb: 255, 215, 6;
+  background-color: #FFD706;
+  border-color: #FFD706;
+  color: #0D0D0B;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: #CEAE12;
+  border-color: #CEAE12;
+  color: #0D0D0B;
+}
+
+.border-info {
+  border-color: #CCC9B8 !important;
+}
+
+.content {
+  background-color: #F1EFE3;
+}
+
+.border-bottom {
+  border-color: #CCC9B8 !important;
+}
+
+/* Payment processor panels */
+.payment-panel {
+  border: 2px solid #CCC9B8;
+  border-radius: 4px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: border-color 0.3s, opacity 0.3s;
+  opacity: 0.55;
+}
+
+.payment-panel.active {
+  border-color: #FFD706;
+  opacity: 1;
+}
+
+.payment-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.payment-panel-badge {
+  font-size: x-small;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+}
+
+.recurly-badge {
+  background: #FFD706;
+  color: #0D0D0B;
+}
+
+.stripe-badge {
+  background: #635BFF;
+  color: #fff;
+}
+
+/* Stripe Elements — match Recurly element appearance */
+.stripe-element {
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.3s;
+  outline: none;
+  border: 2px solid #CCC9B8;
+  box-shadow: none;
+  background: transparent;
+  width: 100%;
+  height: 42px;
+  margin: 0 0 1rem;
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.stripe-element.StripeElement--focus {
+  border-color: #0D0D0B;
+}
+
+.stripe-element.StripeElement--invalid {
+  border-color: #FF5810;
 }

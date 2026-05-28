@@ -3,34 +3,29 @@
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>R.js example</title>
+  <title>Recurly JS Demo — Checkout</title>
   <script src="/plans"></script>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://js.recurly.com/v4/recurly.js"></script>
-  <link href="https://js.recurly.com/v4/recurly.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Bootstrap CSS only -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <script src="https://js.recurly.com/v4/recurly.js"></script>
+  <link href="https://js.recurly.com/v4/recurly.css" rel="stylesheet" />
+  <script src="https://js.stripe.com/v3/"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <div class="container">
+  <div class="container-fluid p-5">
 
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-
-      <div class="float-left">
-        <img id="preview" src="">
-        <h1 id="nameBrand"></h1>
-        <p id="brandMessage"></p>
+    <header class="d-flex flex-wrap align-items-center justify-content-between pb-4 mb-4 border-bottom">
+      <div class="d-flex align-items-center gap-3">
+        <img id="preview" src="" style="max-height: 40px; width: auto;">
+        <h1 id="nameBrand" class="mb-0 fs-4"></h1>
+        <p id="brandMessage" class="mb-0 text-muted"></p>
       </div>
-
-      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-        <svg class="bi me-2" width="40" height="32">
-          <use xlink:href="#bootstrap"></use>
-        </svg>
-        <!-- <span class="fs-4"><img src="images/croppedcakes-removebg-preview.png" width="280"></span> -->
-      </a>
-
       <ul class="nav nav-pills">
         <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
         <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
@@ -39,73 +34,112 @@
         <li class="nav-item"><a href="#" class="nav-link">About</a></li>
       </ul>
     </header>
-    </div>
-  <main>
-    <section class="px-4 py-5 checkout border border-info border-4 rounded content">
+
+    <div class="p-5 border content rounded checkout-form">
       <form id="form" method="post" action="/api/purchases/new">
-        <div id="plan-container">
+        <div id="plan-container" class="mb-3">
           <div id="plan"></div>
           <select id="plan-select" data-recurly="plan" name="plan-code"></select>
         </div>
-        <label for="first_name">First Name</label>
-        <input type="text" id="first_name" name="first-name" data-recurly="first_name">
-        <label for="last_name">Last Name</label>
-        <input type="text" id="last_name" name="last-name" data-recurly="last_name">
-        <label for="state">State</label>
-        <input type="text" id="region" name="region" data-recurly="region">
-        <label for="postal_code">Postal Code</label>
-        <input type="text" id="postal_code" name="postal-code" data-recurly="postal_code">
-        <label for="country">Country</label>
-        <input type="text" id="country" name="country" data-recurly="country">
-        <input type="hidden" data-recurly="token" name="recurly-token">
-        <label for="coupon">coupon</label>
-        <input type="text" id="coupon" name="coupon" data-recurly="coupon">
 
+        <div class="row g-3 mb-3">
+          <div class="col-6">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first-name" data-recurly="first_name">
+          </div>
+          <div class="col-6">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last-name" data-recurly="last_name">
+          </div>
+          <div class="col-12">
+            <label for="address1">Address 1</label>
+            <input type="text" id="address1" name="address1" data-recurly="address1">
+          </div>
+          <div class="col-12">
+            <label for="address2">Address 2</label>
+            <input type="text" id="address2" name="address2" data-recurly="address2">
+          </div>
+          <div class="col-5">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" data-recurly="city">
+          </div>
+          <div class="col-4">
+            <label for="state">State</label>
+            <input type="text" id="region" name="region" data-recurly="region">
+          </div>
+          <div class="col-3">
+            <label for="postal_code">Postal Code</label>
+            <input type="text" id="postal_code" name="postal-code" data-recurly="postal_code">
+          </div>
+          <div class="col-6">
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" data-recurly="country">
+          </div>
+          <div class="col-6">
+            <label for="coupon">Coupon</label>
+            <input type="text" id="coupon" name="coupon" data-recurly="coupon">
+          </div>
         </div>
-        <div id="recurly-elements">
-          <label for="reculry-elements-number">Card Number</label>
-          <div id="recurly-elements-number"></div>
-          <label for="reculry-elements-month">Month</label>
-          <div id="recurly-elements-month"></div>
-          <label for="reculry-elements-year">Year</label>
-          <div id="recurly-elements-year"></div>
-          <label for="reculry-elements-cvv">CVV</label>
-          <div id="recurly-elements-cvv"></div>
+
+        <input type="hidden" data-recurly="token" name="recurly-token">
+        <input type="hidden" id="stripe-confirmation-token" name="stripe-confirmation-token">
+        <input type="hidden" id="active-processor" name="processor" value="recurly">
+        <input type="hidden" id="plan-amount" name="plan-amount">
+        <input type="hidden" id="plan-currency" name="plan-currency">
+
+        <div class="row g-3 mb-3" id="payment-panels">
+          <div class="col-12" id="recurly-panel">
+            <div class="payment-panel active">
+              <div class="payment-panel-header">
+                <span class="payment-panel-badge recurly-badge">Recurly</span>
+                <h6 class="mb-0">Pay with Recurly</h6>
+              </div>
+              <label>Card Number</label>
+              <div id="recurly-elements-number" class="mb-3"></div>
+              <div class="row g-2">
+                <div class="col-4">
+                  <label>Month</label>
+                  <div id="recurly-elements-month"></div>
+                </div>
+                <div class="col-4">
+                  <label>Year</label>
+                  <div id="recurly-elements-year"></div>
+                </div>
+                <div class="col-4">
+                  <label>CVV</label>
+                  <div id="recurly-elements-cvv"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12" id="stripe-panel">
+            <div class="payment-panel">
+              <div class="payment-panel-header">
+                <span class="payment-panel-badge stripe-badge">Stripe</span>
+                <h6 class="mb-0">Pay with Stripe</h6>
+              </div>
+              <div id="stripe-payment-element"></div>
+            </div>
+          </div>
         </div>
-        <div id="errors"></div>
-        <div class="text-center">
-          <p>
-            Due now
-          </p>
+
+        <div id="errors" class="mt-2"></div>
+        <div class="text-center mt-3">
+          <p>Due now</p>
           <ul class="list-unstyled">
-            <li>
-              Discount:
-              <!-- <span data-recurly="currency_symbol"></span> -->
-              <span data-recurly="discount_now"></span>
-            </li>
-            <li>
-              Subtotal:
-              <!-- <span data-recurly="currency_symbol"></span> -->
-              <span data-recurly="subtotal_now"></span>
-            </li>
-            <li>
-              Tax:
-              <!-- <span data-recurly="currency_symbol"></span> -->
-              <span data-recurly="taxes_now"></span>
-            </li>
+            <li>Discount: <span data-recurly="discount_now"></span></li>
+            <li>Subtotal: <span data-recurly="subtotal_now"></span></li>
+            <li>Tax: <span data-recurly="taxes_now"></span></li>
             <li>----</li>
-            <li>
-              Total:
-              <!-- <span data-recurly="currency_symbol"></span> -->
-              <span data-recurly="total_now"></span>
-            </li>
+            <li>Total: <span data-recurly="total_now"></span></li>
           </ul>
         </div>
         <button id="subscribe">Subscribe</button>
-        <div id="errors"></div>
       </form>
-    </section>
-  </main>
+    </div>
+
+  </div>
   <script type="module" src="storage.js"></script>
   <script type="module" src="checkout.js"></script>
 </body>
